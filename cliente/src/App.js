@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Nav from "./componentes/Nav";
+import Loading from "./componentes/Loading";
 import Axios from "axios";
+
 import {
   setToken,
   deleteToken,
@@ -9,6 +11,7 @@ import {
 } from "./Helpers/auth-helpers";
 import Signup from "./Vistas/Signup";
 import Login from "./Vistas/Login";
+import Main from "./componentes/Main";
 
 initAxiosInterceptor();
 export default function App() {
@@ -16,19 +19,21 @@ export default function App() {
   const [cargardoUsuario, setCargardoUsuario] = useState(true);
 
   useEffect(() => {
-    async function cargardoUsuario() {
+    async function cargarUsuario() {
       if (!getToken()) {
         setCargardoUsuario(false);
         return;
       }
       try {
         const { data: usuario } = await Axios.get("/api/usuarios/whoami");
+        setUsuario(usuario);
+        setCargardoUsuario(false);
       } catch (error) {
         console.log(error);
       }
     }
-    cargardoUsuario();
-  });
+    cargarUsuario();
+  }, []);
   async function login(email, password) {
     const { data } = await Axios.post("/api/usuarios/login", {
       email,
@@ -47,11 +52,19 @@ export default function App() {
     setUsuario(null);
     deleteToken();
   }
+
+  if (cargardoUsuario) {
+    return (
+      <Main center>
+        <Loading />
+      </Main>
+    );
+  }
   return (
     <div className="ContenedorTemporal">
       <Nav />
-      <Signup signup={signup} />
-      {/* <Login login={login} /> */}
+      {/* <Signup signup={signup} /> */}
+      <Login login={login} />
       <div>{JSON.stringify(usuario)}</div>
     </div>
   );
