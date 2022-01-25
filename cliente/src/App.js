@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+
 import Nav from "./componentes/Nav";
 import Loading from "./componentes/Loading";
 import Axios from "axios";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import {
   setToken,
@@ -34,11 +36,12 @@ export default function App() {
     }
     cargarUsuario();
   }, []);
+
   async function login(email, password) {
     const { data } = await Axios.post("/api/usuarios/login", {
       email,
       password,
-    }); //data usuario data Token
+    }); //podemos cerrar la pagina y el usuario queda guardado, con setToken
     setUsuario(data.usuario);
     setToken(data.token);
   }
@@ -61,11 +64,25 @@ export default function App() {
     );
   }
   return (
-    <div className="ContenedorTemporal">
+    <div className="contenedor temporal">
       <Nav />
-      {/* <Signup signup={signup} /> */}
+      <Signup signup={signup} />
       <Login login={login} />
       <div>{JSON.stringify(usuario)}</div>
     </div>
+  );
+}
+function LogoutRoutes({ login, signup }) {
+  return (
+    <BrowserRouter>
+      <Route
+        Path="/login/"
+        render={(props) => <Login {...props} login={login} />}
+      />
+      <Route
+      // render={(props) => <Signup {...props} signup={signup} />}
+      // default
+      />
+    </BrowserRouter>
   );
 }

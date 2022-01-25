@@ -2,10 +2,10 @@ import React from "react";
 
 export default function Nav() {
   return (
-    <nav className="nav">
-      <ul className="nav__links">
+    <nav className="Nav">
+      <ul className="Nav__links">
         <li>
-          <a href="/" className="nav__link">
+          <a href="/" className="Nav__link">
             Clontagram
           </a>
         </li>

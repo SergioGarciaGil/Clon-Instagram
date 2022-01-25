@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Axios from "axios";
 import Main from "../componentes/Main";
 
 import imagenSignup from "../imagenes/signup.png";
@@ -18,11 +19,12 @@ export default function Signup({ signup }) {
       [e.target.name]: e.target.value,
     });
   }
-
+  //  async:palabra asincrona se utilz para llamados al servidor
   async function handleSubmit(e) {
     e.preventDefault();
     try {
       signup(usuario);
+      // le enviamos al servidor el nuevo usuario y el servidor nos responde con un token para identificar al usuario mas adelante.
     } catch (error) {
       console.log(error);
     }
